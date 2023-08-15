@@ -1,4 +1,3 @@
-import math
 import random
 import collections
 from typing import Self, Any
@@ -39,7 +38,7 @@ class DesicionNode:
         self.true_branch = true_branch
         self.false_branch = false_branch
         
-class MyDT:
+class MyDTClassifier:
     def __init__(self):
         pass
     
@@ -113,8 +112,5 @@ class MyDT:
         if rows.ndim == 1:
             return self.classify(rows, self.head)
         else:
-            predictions = []
-            for row in rows:
-                predictions.append(self.classify(row, self.head))
-            return np.array(predictions)
+            return np.array([self.classify(row, self.head) for row in rows])
     
