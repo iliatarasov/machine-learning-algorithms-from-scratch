@@ -3,7 +3,7 @@ from matplotlib.colors import ListedColormap
 import numpy as np 
 
 def compare_classifiers(models, X_test, y_test, xx, yy, X=None, y=None,
-                        colormap='RB', X_alpha=0.3, figsize=(12, 5)):
+                        colormap='RB', X_alpha=0.3, figsize=None):
     '''
     Utility function that plots desicion rules for classifiers on a test 
     dataset
@@ -13,6 +13,8 @@ def compare_classifiers(models, X_test, y_test, xx, yy, X=None, y=None,
         'RB': ('coolwarm', 'seismic')
     }
     cm, cm_bright = cmap[colormap]
+    if figsize is None:
+        figsize = (len(models) * 6, 5)
     plt.figure(figsize=figsize)    
     for i, clf in enumerate(models):
         prediction = clf.predict(X_test)
