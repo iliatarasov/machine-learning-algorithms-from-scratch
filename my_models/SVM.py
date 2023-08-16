@@ -53,7 +53,7 @@ class MySVC:
         epoch = 0
         
         while theta > self.tol and epoch < self.max_iter:
-            w_grad = - self.w
+            w_grad = 0#- self.w
             b_grad = 0
             for i in range(n_samples):
                 x_i = X[i].reshape(-1, 1)
@@ -61,7 +61,7 @@ class MySVC:
                 t_i = y_i * (np.matmul(self.w.T, x_i) + self.b).item()
                 if t_i <= 1:
                     w_grad -= self.C * y_i * x_i
-                    b_grad -= y_i
+                    b_grad -= self.C * y_i
             self.w -= learning_rate * w_grad
             self.b -= learning_rate * b_grad
             
