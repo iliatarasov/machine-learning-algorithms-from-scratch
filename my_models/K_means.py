@@ -47,7 +47,6 @@ class MyKMeans:
         '''Train the model on X and return clusters'''
         # chose centers randomly at first
         self.centers = X[np.random.choice(X.shape[0], self.k, replace=False)]
-        #self.centers = np.random.choice(X, self.k, replace=False)   
         self.iteration = 0    
         # iterate until the centers no longer change or max_iter is reached
         while True:
