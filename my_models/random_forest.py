@@ -6,8 +6,9 @@ from .desicion_tree import MyDTClassifier
 
 
 class MyRFClassifier:
-    def __init__(self, n_estimators: int=50):
+    def __init__(self, n_estimators: int=50, base_classifier=MyDTClassifier):
         self.n_estimators = n_estimators
+        self.base_classifier=base_classifier
     
     def test_accuracy(self, tree: MyDTClassifier, test_data: np.ndarray) -> float:
         predictions = tree.predict(test_data[:, :-1])
@@ -26,7 +27,7 @@ class MyRFClassifier:
         self.test_scores = []
         for _ in range(self.n_estimators):
             bootstrap, test = self.bootstrap(data)
-            tree = MyDTClassifier()
+            tree = self.base_classifier()
             tree.fit(bootstrap)
             self.trees.append(tree)
             test_score = self.test_accuracy(tree, test)
