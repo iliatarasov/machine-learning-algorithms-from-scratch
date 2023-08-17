@@ -1,12 +1,28 @@
+import collections
+import random
 import numpy as np
+
 
 class MyKNN:
     '''KNN classifier class'''
-    def __init__(self, n_neighbors: int=5) -> None:
+    def __init__(self, 
+                 n_neighbors: int=5, 
+                 method: str='maj') -> None:
         '''Arguments:
-            n_neighbors (int): number of neighbors to consider'''
+            n_neighbors (int): number of neighbors to consider
+            multiclass_method (str): name for the classification method to use:
+                'maj' for 'majority': label is selected by most common among
+                neighbors;
+                'prob' for 'probabilistic': where label is drawn randomly
+                among neighbors (with uniform distribution)
+        '''
+        MULTICLASS_METHODS = ['maj', 'prob']
+        if method not in MULTICLASS_METHODS:
+            raise ValueError(f'Method {method} not supported.\
+                Please select from {MULTICLASS_METHODS}')
         self.k = n_neighbors
         self.trained = False
+        self.method = method
     
     def get_distances(self, point: np.ndarray) -> np.ndarray:
         '''
@@ -25,6 +41,7 @@ class MyKNN:
         '''
         self.X = X
         self.y = y
+        self.n_classes = len(set(y))
         self.trained = True
         
     def predict(self, X: np.ndarray) -> np.ndarray:
@@ -36,8 +53,14 @@ class MyKNN:
         for x in X:
             dists = self.get_distances(x)
             neighbors = sorted(zip(dists, self.y), key=lambda x: x[0])
-            k_nearest = neighbors[1 : 1 + self.k]
-            label = sum([neighbor[1]/self.k for neighbor in k_nearest])
+            k_nearest = neighbors[:self.k]
+            match self.method:
+                case 'maj':
+                    labels = collections.Counter([neighbor[1] 
+                                                for neighbor in k_nearest])
+                    label = max(labels.items(), key=lambda x: x[1])[0]
+                case 'prob':
+                    label = random.choice(k_nearest)[1]
             predictions.append(label)
         predictions = np.sign(predictions)
         return predictions
