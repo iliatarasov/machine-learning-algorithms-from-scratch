@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn.tree import DecisionTreeClassifier 
 
-class MyABClassifier():
+class MyABClassifier:
     '''Adaptive boosting classifier class'''
     def __init__(self, 
                  n_estimators: int=50, 
